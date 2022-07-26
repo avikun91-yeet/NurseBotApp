@@ -9,8 +9,8 @@ public class RoomKey {
     public static final String PATIENT_INFO_TABLE_NAME = "Patient_Info_Table";
 
     public static final String PATIENT_ID = "Patient_id_PK";
-    public static final String FK_MEDICINE_ID = "Medicine_Index_FK";
-    public static final String MEDICINE_ID = "Medicine_Index_PK";
+    public static final String FK_PATIENT_ID = "Patient_Index_FK";
+    public static final String PK_MEDICINE_ID = "Medicine_Index_PK";
     public static final String DB_NAME = "Prescription_DB";
     public static final String MED_NAME = "Medicine_Name";
     public static final String BOX_NO = "Medicine_Box_Number";
@@ -18,6 +18,7 @@ public class RoomKey {
     public static final String PATIENT_NAME = "Patient_Name";
     public static final String MEDICINE_TIME_UNIX = "Medicine_Take_Time_Unix";
 
+    public static final String TIMES[] = {"Breakfast", "Lunch", "Dinner"};
     public static final Map<String, Long> MED_TIME = new HashMap<>();
     public static final Map<Long, String> TIME_MED = new HashMap<>();
     static {

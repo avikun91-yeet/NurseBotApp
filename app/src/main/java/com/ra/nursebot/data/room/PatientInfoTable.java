@@ -2,29 +2,18 @@ package com.ra.nursebot.data.room;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import static androidx.room.ForeignKey.CASCADE;
+import com.ra.nursebot.data.model.BaseModel;
 
 import java.io.Serializable;
 
-@Entity(tableName = RoomKey.PATIENT_INFO_TABLE_NAME,
-        foreignKeys = @ForeignKey(
-                entity = MedicineInfoTable.class,
-                parentColumns = RoomKey.MEDICINE_ID,
-                childColumns = RoomKey.FK_MEDICINE_ID,
-                onDelete = CASCADE
-        ))
-public class PatientInfoTable implements Serializable {
+@Entity(tableName = RoomKey.PATIENT_INFO_TABLE_NAME)
+public class PatientInfoTable extends BaseModel implements Serializable {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = RoomKey.PATIENT_ID, index = true)
-    private int pk;
-
-
-    @ColumnInfo(name = RoomKey.FK_MEDICINE_ID)
-    private int fk_med;
+    private long pk;
 
     @ColumnInfo(name = RoomKey.PATIENT_NAME)
     private String patientName;
@@ -35,27 +24,18 @@ public class PatientInfoTable implements Serializable {
     public PatientInfoTable() {
     }
 
-    public PatientInfoTable(int pk, int fk_med, String patientName, int bedNo) {
+    public PatientInfoTable(long pk, String patientName, int bedNo) {
         this.pk = pk;
-        this.fk_med = fk_med;
         this.patientName = patientName;
         this.bedNo = bedNo;
     }
 
-    public int getPk() {
+    public long getPk() {
         return pk;
     }
 
-    public void setPk(int pk) {
+    public void setPk(long pk) {
         this.pk = pk;
-    }
-
-    public int getFk_med() {
-        return fk_med;
-    }
-
-    public void setFk_med(int fk_med) {
-        this.fk_med = fk_med;
     }
 
     public String getPatientName() {

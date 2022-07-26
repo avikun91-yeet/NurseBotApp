@@ -7,26 +7,38 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
+import com.ra.nursebot.data.model.BaseModel;
 
 import java.io.Serializable;
 
+import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(tableName = RoomKey.MEDICINE_INFO_TABLE_NAME)
-public class MedicineInfoTable implements Serializable {
+@Entity(tableName = RoomKey.MEDICINE_INFO_TABLE_NAME,
+        foreignKeys = @ForeignKey(
+                entity = PatientInfoTable.class,
+                parentColumns = RoomKey.PATIENT_ID,
+                childColumns = RoomKey.FK_PATIENT_ID,
+                onDelete = CASCADE
+        ))
+public class MedicineInfoTable extends BaseModel implements Serializable {
 
     public MedicineInfoTable() {
     }
 
-    public MedicineInfoTable(int pk, String medicineName, int boxNo, long unixTime) {
+    public MedicineInfoTable(long pk, String medicineName, int boxNo, long unixTime) {
         this.pk = pk;
         this.medicineName = medicineName;
         this.boxNo = boxNo;
         this.unixTime = unixTime;
     }
 
-    @PrimaryKey
-    @ColumnInfo(name = RoomKey.MEDICINE_ID, index = true)
-    private int pk;
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = RoomKey.PK_MEDICINE_ID, index = true)
+    private long pk;
+
+
+    @ColumnInfo(name = RoomKey.FK_PATIENT_ID)
+    private long fkPatient;
 
     @ColumnInfo(name = RoomKey.MED_NAME)
     private String medicineName;
@@ -38,11 +50,11 @@ public class MedicineInfoTable implements Serializable {
     @ColumnInfo(name = RoomKey.MEDICINE_TIME_UNIX)
     private long unixTime;
 
-    public int getPk() {
+    public long getPk() {
         return pk;
     }
 
-    public void setPk(int pk) {
+    public void setPk(long pk) {
         this.pk = pk;
     }
 
@@ -74,5 +86,13 @@ public class MedicineInfoTable implements Serializable {
     @Override
     public String toString() {
         return new Gson().toJson(this);
+    }
+
+    public long getFkPatient() {
+        return fkPatient;
+    }
+
+    public void setFkPatient(long fkPatient) {
+        this.fkPatient = fkPatient;
     }
 }

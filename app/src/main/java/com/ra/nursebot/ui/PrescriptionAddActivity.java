@@ -3,34 +3,29 @@ package com.ra.nursebot.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ra.nursebot.R;
-import com.ra.nursebot.data.model.Medicine;
-import com.ra.nursebot.data.model.Prescription;
+import com.ra.nursebot.data.room.MedicineInfoTable;
+import com.ra.nursebot.data.room.Prescription;
 import com.ra.nursebot.data.room.RoomKey;
 import com.ra.nursebot.databinding.ActivityPrescriptionAddBinding;
-import com.ra.nursebot.databinding.FormMedicineItemBinding;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -64,49 +59,76 @@ public class PrescriptionAddActivity extends AppCompatActivity {
         binding.mbAddMed.setOnClickListener(v -> {
             Timber.d("Timber:checkFilledAddBox():%s", checkFilledAddBox());
             if (checkFilledAddBox()) {
-                Medicine medicine = new Medicine(
-                        Objects.requireNonNull(binding.tietMedName.getText()).toString(),
-                        binding.actvMedTime.getText().toString(),
-                        Integer.parseInt(binding.actvBoxNo.getText().toString()));
+                MedicineInfoTable medicine = new MedicineInfoTable();
+
+                medicine.setMedicineName(binding.tietMedName.getText().toString());
+                medicine.setBoxNo(Integer.parseInt(binding.actvBoxNo.getText().toString()));
+                medicine.setUnixTime(RoomKey.MED_TIME.get(binding.actvMedTime.getText().toString()));
+
                 //Add the medicine
                 mViewModel.addMedicine(medicine);
 
                 //clear the fields
-                binding.tietMedName.setText("");
-                binding.actvMedTime.setText("");
-                binding.actvBoxNo.setText("");
+                clearAddMedFields();
             }
         });
 
-//        binding.mbSave.setOnClickListener(v -> {
-//            List<Medicine> medicineList = mViewModel.getMedicineList().getValue();
-//            if(medicineList.isEmpty()) {
-//                Toast.makeText(this, "No medicines", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//            if(TextUtils.isEmpty(binding.tietPatientName.getText())){
-//                Toast.makeText(this, "Patient name isn't entered", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//            if (TextUtils.isEmpty(binding.tietBedNo.getText())){
-//                Toast.makeText(this, "Bed number isn't entered", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//            Prescription prescription = new Prescription(
-//                    binding.tietPatientName.getText().toString(),
-//                    binding.tietBedNo.getText().toString(), medicineList);
-//
-//        });
-        binding.mbSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Timber.d("%s", mViewModel.getAllByPatient().getValue());
+        binding.mbSave.setOnClickListener(v -> {
+            List<MedicineInfoTable> medicineList = mViewModel.getMedicineList().getValue();
+            if(medicineList.isEmpty()) {
+                Toast.makeText(this, "No medicines", Toast.LENGTH_SHORT).show();
+                return;
             }
+            if(TextUtils.isEmpty(binding.tietPatientName.getText())){
+                Toast.makeText(this, "Patient name isn't entered", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (TextUtils.isEmpty(binding.tietBedNo.getText())){
+                Toast.makeText(this, "Bed number isn't entered", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Prescription prescription = new Prescription();
+
+            prescription.setPatientName(binding.tietPatientName.getText().toString());
+            prescription.setBedNo(Integer.parseInt(binding.tietBedNo.getText().toString()));
+            prescription.setMedicines(medicineList);
+            Timber.d("Med list sent to save:%s", medicineList);
+
+            mViewModel.insertPrescription(prescription);
+
+            //clear fields
+            clearAllFields();
+            finish();
         });
     }
 
+    private void clearAddMedFields() {
+        binding.tietMedName.setText("");
+        binding.actvMedTime.setText("");
+        binding.actvBoxNo.setText("");
+    }
 
+    private void clearAllFields() {
+        clearAddMedFields();
+        binding.tietPatientName.setText("");
+        binding.tietBedNo.setText("");
+        mViewModel.clearMedicines();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.prescription_add_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_discard) {
+            clearAllFields();
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void initAutoCompleteOptions() {
         ArrayAdapter<String> boxNoAdapter = new ArrayAdapter<>(
@@ -119,9 +141,9 @@ public class PrescriptionAddActivity extends AppCompatActivity {
         ArrayAdapter<String> medTimeAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_dropdown_item_1line
         );
-        medTimeAdapter.add("Breakfast");
-        medTimeAdapter.add("Lunch");
-        medTimeAdapter.add("Dinner");
+        medTimeAdapter.add(RoomKey.TIMES[0]);
+        medTimeAdapter.add(RoomKey.TIMES[1]);
+        medTimeAdapter.add(RoomKey.TIMES[2]);
 
 
         binding.actvBoxNo.setAdapter(boxNoAdapter);
@@ -148,10 +170,10 @@ public class PrescriptionAddActivity extends AppCompatActivity {
         return true;
     }
 
-    public static class FormMedItemAdapter extends ArrayAdapter<Medicine> {
+    public class FormMedItemAdapter extends ArrayAdapter<MedicineInfoTable> {
         private final int resource;
 
-        public FormMedItemAdapter(@NonNull Context context, int resource, @NonNull List<Medicine> objects) {
+        public FormMedItemAdapter(@NonNull Context context, int resource, @NonNull List<MedicineInfoTable> objects) {
             super(context, resource, objects);
             this.resource = resource;
         }
@@ -162,11 +184,11 @@ public class PrescriptionAddActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(resource, parent, false);
             }
-            Medicine med = getItem(position);
-            String text = String.format(Locale.getDefault(), "%s;%d;%s", med.getName(), med.getBoxNo(), med.getTime());
+            MedicineInfoTable med = getItem(position);
+            String text = String.format(Locale.getDefault(), "%s;%d;%s", med.getMedicineName(), med.getBoxNo(), RoomKey.TIME_MED.get(med.getUnixTime()));
             Timber.d("text:%s", text);
             ((TextView) convertView.findViewById(R.id.tv_med_desc)).setText(text);
-            ((ImageButton) convertView.findViewById(R.id.ib_remove)).setOnClickListener(v -> remove(med));
+            ((ImageButton) convertView.findViewById(R.id.ib_remove)).setOnClickListener(v -> mViewModel.removeMedicine(med));
 
             return convertView;
         }

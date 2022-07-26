@@ -7,7 +7,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 @Database(entities = {
-        MedicineInfoTable.class},
+        MedicineInfoTable.class,
+        PatientInfoTable.class},
         exportSchema = false, version = 1)
 public abstract class PrescriptionDatabase extends RoomDatabase {
     private static PrescriptionDatabase database;
