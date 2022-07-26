@@ -7,16 +7,17 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/tv_med_name"
+        android:id="@+id/tv_med_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:maxLines="3"
         android:padding="8dp"
+        android:textColor="?android:textColorPrimary"
         tools:text="Napa;3;morning" />
 
     <ImageButton
-        android:id="@+id/ib_cancel"
+        android:id="@+id/ib_remove"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="40dp"
         android:layout_height="40dp"

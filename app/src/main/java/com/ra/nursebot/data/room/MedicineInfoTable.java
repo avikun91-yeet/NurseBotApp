@@ -1,8 +1,9 @@
-package com.ra.nursebot.room;
+package com.ra.nursebot.data.room;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
@@ -10,24 +11,22 @@ import com.google.gson.Gson;
 import java.io.Serializable;
 
 
-@Entity(tableName = RoomKey.PRESCRIPTION_TABLE_NAME)
-public class PrescriptionInfoTable implements Serializable {
+@Entity(tableName = RoomKey.MEDICINE_INFO_TABLE_NAME)
+public class MedicineInfoTable implements Serializable {
 
-    public PrescriptionInfoTable() {
+    public MedicineInfoTable() {
     }
 
-    public PrescriptionInfoTable(int idx, String medicineName, int boxNo, int bedNo, String patientName, long unixTime) {
-        this.idx = idx;
+    public MedicineInfoTable(int pk, String medicineName, int boxNo, long unixTime) {
+        this.pk = pk;
         this.medicineName = medicineName;
         this.boxNo = boxNo;
-        this.bedNo = bedNo;
-        this.patientName = patientName;
         this.unixTime = unixTime;
     }
 
     @PrimaryKey
     @ColumnInfo(name = RoomKey.MEDICINE_ID, index = true)
-    private int idx;
+    private int pk;
 
     @ColumnInfo(name = RoomKey.MED_NAME)
     private String medicineName;
@@ -35,21 +34,16 @@ public class PrescriptionInfoTable implements Serializable {
     @ColumnInfo(name = RoomKey.BOX_NO)
     private int boxNo;
 
-    @ColumnInfo(name = RoomKey.BED_NO)
-    private int bedNo;
-
-    @ColumnInfo(name = RoomKey.PATIENT_NAME)
-    private String patientName;
 
     @ColumnInfo(name = RoomKey.MEDICINE_TIME_UNIX)
     private long unixTime;
 
-    public int getIdx() {
-        return idx;
+    public int getPk() {
+        return pk;
     }
 
-    public void setIdx(int idx) {
-        this.idx = idx;
+    public void setPk(int pk) {
+        this.pk = pk;
     }
 
     public String getMedicineName() {
@@ -66,22 +60,6 @@ public class PrescriptionInfoTable implements Serializable {
 
     public void setBoxNo(int boxNo) {
         this.boxNo = boxNo;
-    }
-
-    public int getBedNo() {
-        return bedNo;
-    }
-
-    public void setBedNo(int bedNo) {
-        this.bedNo = bedNo;
-    }
-
-    public String getPatientName() {
-        return patientName;
-    }
-
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
     }
 
     public long getUnixTime() {

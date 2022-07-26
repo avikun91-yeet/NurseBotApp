@@ -1,14 +1,11 @@
-package com.ra.nursebot.app;
+package com.ra.nursebot.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
-import com.ra.nursebot.R;
 import com.ra.nursebot.databinding.ActivityStartBinding;
-import com.ra.nursebot.ui.MainActivity;
 
 public class StartActivity extends AppCompatActivity {
 

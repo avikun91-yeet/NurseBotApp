@@ -3,8 +3,7 @@ package com.ra.nursebot.app;
 import android.app.Application;
 import android.content.Context;
 
-import androidx.viewbinding.BuildConfig;
-
+import com.ra.nursebot.BuildConfig;
 import com.ra.nursebot.utils.TagTree;
 
 import java.lang.ref.WeakReference;
@@ -16,7 +15,7 @@ import timber.log.Timber;
 public class App extends Application {
     private static WeakReference<App> mInstance;
     private ExecutorService executorService;
-    
+
     @Override
     public void onCreate() {
         super.onCreate();

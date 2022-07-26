@@ -11,4 +11,7 @@
     <string name="med_time">Med time</string>
     <string name="morning">Morning</string>
     <string name="remove_this_entry">Remove this entry</string>
+    <string name="discard_all_entry">Discard all entry</string>
+    <string name="clear">Clear</string>
+    <string name="save">Save</string>
 </resources>

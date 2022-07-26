@@ -1,4 +1,4 @@
-package com.ra.nursebot.room;
+package com.ra.nursebot.data.room;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 @Database(entities = {
-        PrescriptionInfoTable.class},
+        MedicineInfoTable.class},
         exportSchema = false, version = 1)
 public abstract class PrescriptionDatabase extends RoomDatabase {
     private static PrescriptionDatabase database;

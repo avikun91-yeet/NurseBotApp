@@ -6,20 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <TextView
-        android:id="@+id/tv_clk"
-        android:layout_width="wrap_content"
+    <TextClock
+        android:id="@+id/tc_clk"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="12:00:00 am"
+        android:layout_marginVertical="16dp"
+        android:fontFamily="monospace"
+        android:format12Hour="hh:mm:ss a"
+        android:gravity="center_horizontal"
+        android:textColor="?android:textColorPrimary"
         android:textSize="40sp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"/>
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_upcoming"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_clk"
+        android:layout_below="@id/tc_clk"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"

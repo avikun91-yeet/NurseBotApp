@@ -47,35 +47,97 @@
         android:layout_below="@id/til_bed_no"
         android:layout_margin="4dp"
         android:text="@string/medicines"
+        android:textColor="?android:textColorPrimary"
         android:textSize="20sp" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/llc_medicine_list"
+    <ListView
+        android:id="@+id/lv_medicine_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_medicine"
-        android:orientation="vertical">
+        android:orientation="vertical" />
 
-        <include layout="@layout/form_medicine_item" />
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llc_add_box"
+        android:layout_below="@id/lv_medicine_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/med_add_bg_color">
 
-        <include layout="@layout/medicine_add_form_item" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_med_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_weight="2"
+                android:hint="@string/med_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tiet_med_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_box_no"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_weight="2"
+                android:hint="@string/box_no">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actv_box_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    tools:ignore="LabelFor" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_med_time"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:hint="@string/med_time">
+
+            <AutoCompleteTextView
+                android:id="@+id/actv_med_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="time"
+                tools:ignore="LabelFor" />
+        </com.google.android.material.textfield.TextInputLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:id="@+id/mb_add_med"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/llc_medicine_list"
+        android:layout_below="@id/llc_add_box"
         android:layout_alignParentEnd="true"
         android:text="@string/add_medicine" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_save"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mb_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/mb_add_med"
         android:contentDescription="@string/save_prescription_to_database"
-        android:src="@android:drawable/ic_menu_save" />
+        android:layout_marginTop="16dp"
+        android:text="@string/save" />
 
 </RelativeLayout>
